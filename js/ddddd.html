@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>表格的增删改查</title>
+    <style>
+        table {
+            text-align: center;
+            border-collapse: collapse;
+            border: 1px solid gray;
+        }
+        #tr1 {
+            background: #99d6ff;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+    <script>
+        window.onload=function()
+        {var res = document.getElementById('res')/*重置*/
+            var oTab=document.getElementById('table1')/*表格*/
+            var oName=document.getElementById('name')/*输入姓名*/
+            var oAge=document.getElementById('age')/*输入年龄*/
+            var oBtn=document.getElementById('btn')/*添加按钮*/
+            var oSearch=document.getElementById('search')/*搜索框*/
+            var oSearchBtn=document.getElementById('searchBtn')/*搜索按钮*/
+            var id=oTab.tBodies[0].rows.length//定义序号变量
+
+
+            oBtn.onclick=function()/*添加*/
+            {
+                var oTr=document.createElement('tr')
+
+                var oTd=document.createElement('td')
+                oTd.innerHTML=id++
+                oTr.appendChild(oTd)
+
+                var oTd=document.createElement('td')
+                oTd.innerHTML=oName.value
+                oTr.appendChild(oTd)
+
+                var oTd=document.createElement('td')
+                oTd.innerHTML=oAge.value
+                oTr.appendChild(oTd)
+
+
+
+
+                var td3=document.createElement('td');
+                oTr.appendChild(td3);
+                td3.innerHTML= '更改';
+                td3.style.cursor = 'pointer';
+                td3.onclick = function(){
+                    var ce = this.parentNode.cells;
+                    if (/.*更改.*/.test(td3.innerHTML)){
+                        for( var i = 0; i < ce.length - 2; i++) {
+                            var txt = document.createElement('input');
+                            txt.type = 'text';
+
+                            var ci = ce[i];
+                            txt.value =ci.innerHTML;
+
+                            ci.innerHTML = ' ';
+                            ci.appendChild(txt);
+                        }
+                        td3.innerHTML= '保存';
+                    }
+
+                    else{
+                        for( var i = 0; i < ce.length - 2; i++){
+                            var ci = ce[i];
+                            ci.innerHTML = ci.children[0].value;
+                        }
+                        td3.innerHTML= '更改';
+                    }
+
+
+
+                }//更改
+
+
+                var oTd=document.createElement('td')
+                oTd.innerHTML='<a href="#">删除</a>'
+                oTr.appendChild(oTd)//添加表格行
+
+                oTd.getElementsByTagName('a')[0].onclick=function()
+                {
+                    oTab.tBodies[0].removeChild(this.parentNode.parentNode)
+
+                }//删除表格行
+
+                oTab.tBodies[0].appendChild(oTr)
+            }
+
+            oSearchBtn.onclick=function()
+            {
+
+                for( var i=0; i<oTab.tBodies[0].rows.length; i++)
+                {
+                    var sTab=oTab.tBodies[0].rows[i].cells[1].innerHTML.toLowerCase()
+                    var sTxt=oSearch.value.toLowerCase()
+                    var attr=sTxt.split('')
+                    oTab.tBodies[0].rows[i].style.background=''
+                    for( var j=0; j<attr.length; j++)
+                    {
+                        if(sTab.search(attr[j])!=-1)
+                        {
+                            oTab.tBodies[0].rows[i].style.background='#99d6ff';
+                        }
+
+                    }
+                }
+            }//模糊搜索，多关键字搜索
+
+
+            res.onclick= function () {
+                document.getElementById('form').reset();
+                //重置
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+<form id="form">
+    name：<input type="text" id="name" placeholder="请输入姓名">
+    age：<input type="text" id="age" placeholder="请输入年龄">
+</form>
+<br>
+<input type="reset" id='res'>
+<input id="btn" type="button" value="添加"><br><br>
+<input type="text" id="search" placeholder="请输入你的姓名">
+<input type="button" id="searchBtn" value="搜索"><br><br>
+
+<table id="table1" border="1" width="800px">
+    <tr id="tr1">
+        <td>ID</td>
+        <td>name</td>
+        <td>age</td>
+
+        <td>change</td>
+        <td>delete</td>
+    </tr>
+</table>
+</body>
+</html>
+
+
